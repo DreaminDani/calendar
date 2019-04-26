@@ -1,3 +1,9 @@
+<style>
+  .text-wrapper {
+    margin: 0 24px;
+  }
+</style>
+
 <template>
   <v-layout column justify-center align-center>
     <v-flex xs12 sm8 md6>
@@ -6,13 +12,14 @@
         <vuetify-logo/>
       </div>
       <v-card>
-        <v-card-title class="headline">Ready to see your IP?</v-card-title>
+        <v-card-title class="headline">Type your name to say hello</v-card-title>
+        <v-text-field class="text-wrapper" v-model="name"></v-text-field>
         <v-card-text>
-          <p>Your Ip: {{ ip }}</p>
+          <p>{{ hello }}</p>
         </v-card-text>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="primary" flat nuxt @click="icanhazip()">Get IP</v-btn>
+          <v-btn color="primary" flat nuxt @click="helloworld()">SHOW ME THE MONEY</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
@@ -33,18 +40,19 @@ export default {
       form: {},
       response: '—',
       error: null,
-      ip: null
+      hello: null,
+      name: '',
     }
   },
   methods: {
-    async icanhazip() {
+    async helloworld() {
       try {
-        const res = await this.$axios.$get('/.netlify/functions/icanhazip')
-        this.ip = res
+        const res = await this.$axios.$get(`/.netlify/functions/hello-world?name=${this.name}`)
+        this.hello = res
         this.error = null
       } catch (e) {
         this.error = e.response
-        this.ip = '—'
+        this.hello = '—'
       }
     }
   }
